@@ -64,10 +64,10 @@
                         <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
                     <from>
-                        <image>docker.io/eclipse-temurin:8-jdk-focal</image>
+                        <image>eclipse-temurin:8-jdk-focal</image>
                     </from>
                     <to>
-                        <image>docker.io/pooriyashokri/plotfour</image>
+                        <image>pooriyashokri/plotfour</image>
                     </to>
                 </configuration>
             </plugin>
