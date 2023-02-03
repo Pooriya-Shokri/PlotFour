@@ -26,6 +26,8 @@ jobs:
         run: mvn clean test
       - name: Create Docker Latest
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME}}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD}}
-        run: mvn -Dmaven.test.skip=true clean install jib:build
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo $DOCKER_USERNAME
+          mvn -Dmaven.test.skip=true clean install jib:build
