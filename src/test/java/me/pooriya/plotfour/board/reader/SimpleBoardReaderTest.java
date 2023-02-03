@@ -120,5 +120,23 @@ public class SimpleBoardReaderTest {
 		assertEquals(columns, spec.getColumns());
 	}
 
+	@Test
+	public void isInvalidRange_shouldCheckRange() {
+		assertTrue(SimpleBoardReader.isInvalidRange(-1));
+		assertTrue(SimpleBoardReader.isInvalidRange(0));
+		assertTrue(SimpleBoardReader.isInvalidRange(1));
+		assertTrue(SimpleBoardReader.isInvalidRange(2));
+		assertTrue(SimpleBoardReader.isInvalidRange(3));
+		assertTrue(SimpleBoardReader.isInvalidRange(4));
+		assertFalse(SimpleBoardReader.isInvalidRange(5));
+		assertFalse(SimpleBoardReader.isInvalidRange(6));
+		assertFalse(SimpleBoardReader.isInvalidRange(7));
+		assertFalse(SimpleBoardReader.isInvalidRange(8));
+		assertFalse(SimpleBoardReader.isInvalidRange(9));
+		assertTrue(SimpleBoardReader.isInvalidRange(10));
+		assertTrue(SimpleBoardReader.isInvalidRange(11));
+		assertTrue(SimpleBoardReader.isInvalidRange(12));
+		assertTrue(SimpleBoardReader.isInvalidRange(13));
+	}
 
 }
