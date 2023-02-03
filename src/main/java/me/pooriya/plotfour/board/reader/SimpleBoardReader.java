@@ -11,7 +11,7 @@ import static me.pooriya.plotfour.board.BoardSpecification.MAX_VAL;
 import static me.pooriya.plotfour.board.BoardSpecification.MIN_VAL;
 
 @Value
-public class InputStreamBoardReader implements BoardReader {
+public class SimpleBoardReader implements BoardReader {
 
 	InputStream input;
 
