@@ -65,9 +65,17 @@
                     </container>
                     <from>
                         <image>docker.io/eclipse-temurin:8-jdk-focal</image>
+                        <auth>
+                            <username>${env.DOCKER_USERNAME}</username>
+                            <password>${env.DOCKER_PASSWORD}</password>
+                        </auth>
                     </from>
                     <to>
                         <image>docker.io/pooriyashokri/plotfour</image>
+                        <auth>
+                            <username>${env.DOCKER_USERNAME}</username>
+                            <password>${env.DOCKER_PASSWORD}</password>
+                        </auth>
                     </to>
                 </configuration>
             </plugin>
