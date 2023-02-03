@@ -10,19 +10,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static me.pooriya.plotfour.util.OutputStreamUtil.printMsgToOutput;
 
 @Value
 public class SimplePlayerReader implements PlayerReader {
 
+	@NonNull
 	InputStream input;
 
+	@NonNull
 	OutputStream output;
 
 	@Override
 	@SneakyThrows
 	public Player readPlayer(@NonNull Stance stance) {
-		output.write(String.format("%s player's name:%n> ", stance.getOutputName()).getBytes(UTF_8));
+		printMsgToOutput(output, String.format("%s player's name:%n> ", stance.getOutputName()));
 		String name = new Scanner(input).nextLine();
 		return Player.of(name, stance);
 	}

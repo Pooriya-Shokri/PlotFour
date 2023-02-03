@@ -1,7 +1,6 @@
 package me.pooriya.plotfour.board.reader;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.Value;
 import me.pooriya.plotfour.board.BoardSpecification;
 import org.apache.commons.lang3.StringUtils;
@@ -10,8 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static me.pooriya.plotfour.board.BoardSpecification.*;
+import static me.pooriya.plotfour.util.OutputStreamUtil.printMsgToOutput;
 
 @Value
 public class SimpleBoardReader implements BoardReader {
@@ -35,7 +34,7 @@ public class SimpleBoardReader implements BoardReader {
 
 		BoardSpecification result;
 		do {
-			printMsgToOutput(INPUT_DIMENSION_MSG);
+			printMsgToOutput(output, INPUT_DIMENSION_MSG);
 			String readLine = getAnotherInput(scanner);
 			result = extractBoardSpecification(readLine);
 		} while (result == null);
@@ -49,23 +48,18 @@ public class SimpleBoardReader implements BoardReader {
 		try {
 			BoardSpecification result = parseInputLine(givenLine);
 			if (isInvalidRange(result.getRows())) {
-				printMsgToOutput(INVALID_ROW_VALUE_ERROR_MSG);
+				printMsgToOutput(output, INVALID_ROW_VALUE_ERROR_MSG);
 				return null;
 			}
 			if (isInvalidRange(result.getColumns())) {
-				printMsgToOutput(INVALID_COLUMN_VALUE_ERROR_MSG);
+				printMsgToOutput(output, INVALID_COLUMN_VALUE_ERROR_MSG);
 				return null;
 			}
 			return result;
 		} catch (IllegalArgumentException e) {
-			printMsgToOutput(INVALID_INPUT_ERROR_MSG);
+			printMsgToOutput(output, INVALID_INPUT_ERROR_MSG);
 			return null;
 		}
-	}
-
-	@SneakyThrows
-	private void printMsgToOutput(String x) {
-		output.write(x.getBytes(UTF_8));
 	}
 
 	private String getAnotherInput(Scanner scanner) {
