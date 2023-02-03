@@ -16,4 +16,9 @@ public class OutputStreamUtil {
 		output.write(x.getBytes(UTF_8));
 	}
 
+	public static void printlnMsgToOutput(OutputStream outputStream, String x) {
+		printMsgToOutput(outputStream, x);
+		printMsgToOutput(outputStream, "\n");
+	}
+
 }

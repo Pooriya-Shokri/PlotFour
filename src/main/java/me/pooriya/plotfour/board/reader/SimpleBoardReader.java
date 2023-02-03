@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import static me.pooriya.plotfour.board.BoardSpecification.*;
 import static me.pooriya.plotfour.util.OutputStreamUtil.printMsgToOutput;
+import static me.pooriya.plotfour.util.OutputStreamUtil.printlnMsgToOutput;
 
 @Value
 public class SimpleBoardReader implements BoardReader {
@@ -24,9 +25,9 @@ public class SimpleBoardReader implements BoardReader {
 	private static final String SPLITTER_SYMBOLS = "[xX]";
 	private static final String INPUT_DIMENSION_MSG =
 			String.format("Set the board dimensions (Rows x Columns)%nPress Enter for default (%s x %s)%n> ", DEFAULT_SPECIFICATION.getRows(), DEFAULT_SPECIFICATION.getColumns());
-	private static final String INVALID_INPUT_ERROR_MSG = "Invalid input\n";
-	private static final String INVALID_ROW_VALUE_ERROR_MSG = String.format("Board rows should be from %s to %s%n", MIN_VAL, MAX_VAL);
-	private static final String INVALID_COLUMN_VALUE_ERROR_MSG = String.format("Board columns should be from %s to %s%n", MIN_VAL, MAX_VAL);
+	private static final String INVALID_INPUT_ERROR_MSG = "Invalid input";
+	private static final String INVALID_ROW_VALUE_ERROR_MSG = String.format("Board rows should be from %s to %s", MIN_VAL, MAX_VAL);
+	private static final String INVALID_COLUMN_VALUE_ERROR_MSG = String.format("Board columns should be from %s to %s", MIN_VAL, MAX_VAL);
 
 	@Override
 	public BoardSpecification readSpec() {
@@ -48,16 +49,16 @@ public class SimpleBoardReader implements BoardReader {
 		try {
 			BoardSpecification result = parseInputLine(givenLine);
 			if (isInvalidRange(result.getRows())) {
-				printMsgToOutput(output, INVALID_ROW_VALUE_ERROR_MSG);
+				printlnMsgToOutput(output, INVALID_ROW_VALUE_ERROR_MSG);
 				return null;
 			}
 			if (isInvalidRange(result.getColumns())) {
-				printMsgToOutput(output, INVALID_COLUMN_VALUE_ERROR_MSG);
+				printlnMsgToOutput(output, INVALID_COLUMN_VALUE_ERROR_MSG);
 				return null;
 			}
 			return result;
 		} catch (IllegalArgumentException e) {
-			printMsgToOutput(output, INVALID_INPUT_ERROR_MSG);
+			printlnMsgToOutput(output, INVALID_INPUT_ERROR_MSG);
 			return null;
 		}
 	}
