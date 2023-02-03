@@ -4,48 +4,73 @@ import me.pooriya.plotfour.board.BoardSpecification;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static me.pooriya.plotfour.board.BoardSpecification.DEFAULT_SPECIFICATION;
 import static org.junit.Assert.*;
 
 public class SimpleBoardReaderTest {
 
 	@Test
 	public void readSpec_shouldReturnDefaultWhenInputIsEmpty() {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		InputStream input = IOUtils.toInputStream("\n", UTF_8);
-		SimpleBoardReader reader = new SimpleBoardReader(input);
+		SimpleBoardReader reader = new SimpleBoardReader(input, output);
 		BoardSpecification result = reader.readSpec();
-		assertSame(BoardSpecification.DEFAULT_SPECIFICATION, result);
+		assertEquals("Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> ", output.toString());
+		assertSame(DEFAULT_SPECIFICATION, result);
 	}
 
 	@Test
 	public void readSpec_shouldReturnBoardSpec() {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		InputStream input = IOUtils.toInputStream("5x5\n", UTF_8);
-		SimpleBoardReader reader = new SimpleBoardReader(input);
+		SimpleBoardReader reader = new SimpleBoardReader(input, output);
 		BoardSpecification result = reader.readSpec();
+		assertEquals("Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> ", output.toString());
 		assertBoardSpecBySize(result, 5, 5);
 	}
 
 	@Test
-	public void readSpec_shouldReadUntilInputIsValid() {
-		assertBoardSpecReadByInputStream("123456\n12345*56\n7x 7", 7, 7);
-		assertBoardSpecReadByInputStream("123456\n12345*56\n7x17\n5X5", 5, 5);
-	}
-
-	private void assertBoardSpecReadByInputStream(String inputLine, int rows, int columns) {
-		InputStream input = IOUtils.toInputStream(inputLine, UTF_8);
-		SimpleBoardReader reader = new SimpleBoardReader(input);
+	public void readSpec_shouldReadUntilInputIsValidInputIsNotInFormat() {
+		InputStream input = IOUtils.toInputStream("123456\n12345*56\n7x 7", UTF_8);
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		SimpleBoardReader reader = new SimpleBoardReader(input, output);
 		BoardSpecification result = reader.readSpec();
-		assertBoardSpecBySize(result, rows, columns);
+		assertBoardSpecBySize(result, 7, 7);
+		assertEquals("Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> Invalid input\n" +
+				"Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> Invalid input\n" +
+				"Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> ", output.toString());
 	}
 
 	@Test
-	public void parseInputLineShouldReturnNull_whenInputStringIsEmpty() {
-		assertNull(SimpleBoardReader.parseInputLine(null));
-		assertNull(SimpleBoardReader.parseInputLine(""));
-		assertNull(SimpleBoardReader.parseInputLine("     "));
-		assertNull(SimpleBoardReader.parseInputLine("\n \n \n"));
+	public void readSpec_shouldReadUntilInputIsValid_whenInputIsNotInValidRange() {
+		InputStream input = IOUtils.toInputStream("17X7\n7x17\n5X5", UTF_8);
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		SimpleBoardReader reader = new SimpleBoardReader(input, output);
+		BoardSpecification result = reader.readSpec();
+		assertBoardSpecBySize(result, 5, 5);
+		assertEquals("Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> Board rows should be from 5 to 9\n" +
+				"Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> Board columns should be from 5 to 9\n" +
+				"Set the board dimensions (Rows x Columns)\n" +
+				"Press Enter for default (6 x 7)\n" +
+				"> ", output.toString());
 	}
 
 	@Test
