@@ -1,9 +1,11 @@
-name: verify-ci
+name: deploy-ci
 
 on:
-  push:
-    branches:
-      - 'main'
+  workflow_run:
+    workflows: [ "verify-ci" ]
+    branches: [ main ]
+    types:
+      - completed
 
 jobs:
   deploy:
