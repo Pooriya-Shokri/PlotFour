@@ -1,11 +1,9 @@
-name: deploy-ci
+name: release-ci
 
 on:
-  workflow_run:
-    workflows: [ "verify-ci" ]
-    branches: [ main ]
-    types:
-      - completed
+  push:
+    tags:
+      - '*'
 
 jobs:
   deploy:
@@ -22,8 +20,8 @@ jobs:
           java-version: '8'
           cache: 'maven'
 
-      - name: Docker-Latest
+      - name: Docker-Release
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: mvn -Dmaven.test.skip=true -Djib.from.auth.username=$DOCKER_USERNAME -Djib.from.auth.password=$DOCKER_PASSWORD -Djib.to.auth.username=$DOCKER_USERNAME -Djib.to.auth.password=$DOCKER_PASSWORD -Djib.to.image="pooriyashokri/plotfour:latest" install jib:build
+        run: mvn -Dmaven.test.skip=true -Djib.from.auth.username=$DOCKER_USERNAME -Djib.from.auth.password=$DOCKER_PASSWORD -Djib.to.auth.username=$DOCKER_USERNAME -Djib.to.auth.password=$DOCKER_PASSWORD -Djib.to.image="pooriyashokri/plotfour:$${{ github.ref_name }}" install jib:build

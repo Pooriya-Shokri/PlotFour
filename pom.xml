@@ -66,9 +66,6 @@
                     <from>
                         <image>eclipse-temurin:8-jdk-focal</image>
                     </from>
-                    <to>
-                        <image>pooriyashokri/plotfour</image>
-                    </to>
                 </configuration>
             </plugin>
         </plugins>
