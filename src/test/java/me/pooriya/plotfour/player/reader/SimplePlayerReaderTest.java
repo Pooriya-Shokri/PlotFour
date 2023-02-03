@@ -32,7 +32,7 @@ public class SimplePlayerReaderTest {
 		Player result = reader.readPlayer(FIRST);
 		assertEquals("some-name", result.getName());
 		assertSame(FIRST, result.getStance());
-		assertEquals("First player's name:\n", output.toString());
+		assertEquals("First player's name:\n> ", output.toString());
 	}
 
 }

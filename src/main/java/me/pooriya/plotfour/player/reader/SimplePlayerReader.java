@@ -22,7 +22,7 @@ public class SimplePlayerReader implements PlayerReader {
 	@Override
 	@SneakyThrows
 	public Player readPlayer(@NonNull Stance stance) {
-		output.write(String.format("%s player's name:%n", stance.getOutputName()).getBytes(UTF_8));
+		output.write(String.format("%s player's name:%n> ", stance.getOutputName()).getBytes(UTF_8));
 		String name = new Scanner(input).nextLine();
 		return Player.of(name, stance);
 	}
