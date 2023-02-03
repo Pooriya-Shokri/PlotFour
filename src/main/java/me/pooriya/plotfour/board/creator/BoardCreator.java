@@ -1,7 +1,9 @@
 package me.pooriya.plotfour.board.creator;
 
+import me.pooriya.plotfour.board.BoardSpecification;
+
 public interface BoardCreator {
 
-	int[][] createBoard(int rows, int columns);
+	int[][] createBoard(BoardSpecification spec);
 
 }
