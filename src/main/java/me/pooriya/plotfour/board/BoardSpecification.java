@@ -2,7 +2,7 @@ package me.pooriya.plotfour.board;
 
 import lombok.Value;
 
-@Value
+@Value(staticConstructor = "of")
 public class BoardSpecification {
 
 	int rows;
