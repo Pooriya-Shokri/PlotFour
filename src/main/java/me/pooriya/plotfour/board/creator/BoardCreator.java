@@ -1,4 +1,4 @@
-package me.pooriya.plotfour.board;
+package me.pooriya.plotfour.board.creator;
 
 public interface BoardCreator {
 
