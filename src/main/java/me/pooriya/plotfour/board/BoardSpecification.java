@@ -9,4 +9,9 @@ public class BoardSpecification {
 
 	int columns;
 
+	public static final int MIN_VAL = 5;
+	public static final int MAX_VAL = 9;
+
+	public static final BoardSpecification DEFAULT_SPECIFICATION = BoardSpecification.of(6, 7);
+
 }
