@@ -1,5 +1,6 @@
 package me.pooriya.plotfour.board.reader;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
 import me.pooriya.plotfour.board.BoardSpecification;
@@ -10,43 +11,54 @@ import java.io.OutputStream;
 import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static me.pooriya.plotfour.board.BoardSpecification.MAX_VAL;
-import static me.pooriya.plotfour.board.BoardSpecification.MIN_VAL;
+import static me.pooriya.plotfour.board.BoardSpecification.*;
 
 @Value
 public class SimpleBoardReader implements BoardReader {
 
+	@NonNull
 	InputStream input;
 
+	@NonNull
 	OutputStream output;
 
 	@Override
-	@SneakyThrows
 	public BoardSpecification readSpec() {
 		Scanner scanner = new Scanner(input);
 
-		BoardSpecification result = null;
+		BoardSpecification result;
 		do {
-			output.write("Set the board dimensions (Rows x Columns)\nPress Enter for default (6 x 7)\n> ".getBytes(UTF_8));
+			printMsgToOutput("Set the board dimensions (Rows x Columns)\nPress Enter for default (6 x 7)\n> ");
 			String readLine = getAnotherInput(scanner);
-			if (StringUtils.isEmpty(readLine) || StringUtils.isAllBlank(readLine))
-				return BoardSpecification.DEFAULT_SPECIFICATION;
-
-			try {
-				result = parseInputLine(readLine);
-				if (!isInValidRange(result.getRows())) {
-					result = null;
-					output.write("Board rows should be from 5 to 9\n".getBytes(UTF_8));
-				} else if (!isInValidRange(result.getColumns())) {
-					result = null;
-					output.write("Board columns should be from 5 to 9\n".getBytes(UTF_8));
-				}
-			} catch (IllegalArgumentException e) {
-				output.write("Invalid input\n".getBytes(UTF_8));
-				result = null;
-			}
+			result = extractBoardSpecification(readLine);
 		} while (result == null);
 		return result;
+	}
+
+	private BoardSpecification extractBoardSpecification(String givenLine) {
+		if (StringUtils.isEmpty(givenLine) || StringUtils.isAllBlank(givenLine))
+			return DEFAULT_SPECIFICATION;
+
+		try {
+			BoardSpecification result = parseInputLine(givenLine);
+			if (isInvalidRange(result.getRows())) {
+				printMsgToOutput("Board rows should be from 5 to 9\n");
+				return null;
+			}
+			if (isInvalidRange(result.getColumns())) {
+				printMsgToOutput("Board columns should be from 5 to 9\n");
+				return null;
+			}
+			return result;
+		} catch (IllegalArgumentException e) {
+			printMsgToOutput("Invalid input\n");
+			return null;
+		}
+	}
+
+	@SneakyThrows
+	private void printMsgToOutput(String x) {
+		output.write(x.getBytes(UTF_8));
 	}
 
 	private String getAnotherInput(Scanner scanner) {
@@ -61,15 +73,15 @@ public class SimpleBoardReader implements BoardReader {
 		try {
 			String[] splitLine = givenLine.split("[xX]");
 			if (splitLine.length != 2)
-				throw new IllegalArgumentException("inputLine is not acceptable");
-			return BoardSpecification.of(Integer.parseInt(splitLine[0].trim()), Integer.parseInt(splitLine[1].trim()));
+				throw new IllegalArgumentException();
+			return of(Integer.parseInt(splitLine[0].trim()), Integer.parseInt(splitLine[1].trim()));
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
 	}
 
-	static boolean isInValidRange(int inputVal) {
-		return inputVal <= MAX_VAL && inputVal >= MIN_VAL;
+	static boolean isInvalidRange(int inputVal) {
+		return inputVal > MAX_VAL || inputVal < MIN_VAL;
 	}
 
 }
