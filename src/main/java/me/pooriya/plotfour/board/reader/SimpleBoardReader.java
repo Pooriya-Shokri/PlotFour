@@ -22,13 +22,20 @@ public class SimpleBoardReader implements BoardReader {
 	@NonNull
 	OutputStream output;
 
+	private static final String SPLITTER_SYMBOLS = "[xX]";
+	private static final String INPUT_DIMENSION_MSG =
+			String.format("Set the board dimensions (Rows x Columns)%nPress Enter for default (%s x %s)%n> ", DEFAULT_SPECIFICATION.getRows(), DEFAULT_SPECIFICATION.getColumns());
+	private static final String INVALID_INPUT_ERROR_MSG = "Invalid input\n";
+	private static final String INVALID_ROW_VALUE_ERROR_MSG = String.format("Board rows should be from %s to %s%n", MIN_VAL, MAX_VAL);
+	private static final String INVALID_COLUMN_VALUE_ERROR_MSG = String.format("Board columns should be from %s to %s%n", MIN_VAL, MAX_VAL);
+
 	@Override
 	public BoardSpecification readSpec() {
 		Scanner scanner = new Scanner(input);
 
 		BoardSpecification result;
 		do {
-			printMsgToOutput("Set the board dimensions (Rows x Columns)\nPress Enter for default (6 x 7)\n> ");
+			printMsgToOutput(INPUT_DIMENSION_MSG);
 			String readLine = getAnotherInput(scanner);
 			result = extractBoardSpecification(readLine);
 		} while (result == null);
@@ -42,16 +49,16 @@ public class SimpleBoardReader implements BoardReader {
 		try {
 			BoardSpecification result = parseInputLine(givenLine);
 			if (isInvalidRange(result.getRows())) {
-				printMsgToOutput("Board rows should be from 5 to 9\n");
+				printMsgToOutput(INVALID_ROW_VALUE_ERROR_MSG);
 				return null;
 			}
 			if (isInvalidRange(result.getColumns())) {
-				printMsgToOutput("Board columns should be from 5 to 9\n");
+				printMsgToOutput(INVALID_COLUMN_VALUE_ERROR_MSG);
 				return null;
 			}
 			return result;
 		} catch (IllegalArgumentException e) {
-			printMsgToOutput("Invalid input\n");
+			printMsgToOutput(INVALID_INPUT_ERROR_MSG);
 			return null;
 		}
 	}
@@ -71,7 +78,7 @@ public class SimpleBoardReader implements BoardReader {
 
 	static BoardSpecification parseInputLine(String givenLine) {
 		try {
-			String[] splitLine = givenLine.split("[xX]");
+			String[] splitLine = givenLine.split(SPLITTER_SYMBOLS);
 			if (splitLine.length != 2)
 				throw new IllegalArgumentException();
 			return of(Integer.parseInt(splitLine[0].trim()), Integer.parseInt(splitLine[1].trim()));
