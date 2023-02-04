@@ -2,10 +2,12 @@ package me.pooriya.plotfour.board;
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 import me.pooriya.plotfour.player.Player;
 
 import static me.pooriya.plotfour.board.Board.TurnResult.*;
 
+@NonFinal
 @Value(staticConstructor = "of")
 public class Board {
 
