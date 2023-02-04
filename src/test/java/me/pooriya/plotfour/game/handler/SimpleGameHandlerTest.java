@@ -1,6 +1,7 @@
 package me.pooriya.plotfour.game.handler;
 
 import me.pooriya.plotfour.board.Board;
+import me.pooriya.plotfour.board.plotter.BoardPlotter;
 import me.pooriya.plotfour.game.Game;
 import me.pooriya.plotfour.game.reader.EndgameException;
 import me.pooriya.plotfour.game.reader.GameReader;
@@ -31,13 +32,15 @@ public class SimpleGameHandlerTest {
 	private GameWriter writer;
 	@Mock
 	private GameReader reader;
+	@Mock
+	private BoardPlotter plotter;
 	private SimpleGameHandler handler;
 
 	@Before
 	public void setup() {
 		first = first();
 		second = second();
-		handler = new SimpleGameHandler(reader, writer, Game.of(first, second, board));
+		handler = new SimpleGameHandler(reader, writer, Game.of(first, second, board), plotter);
 		when(board.getSpec()).thenReturn(DEFAULT_SPECIFICATION);
 	}
 
@@ -64,6 +67,7 @@ public class SimpleGameHandlerTest {
 		when(handler.getPlayerCol(any())).thenReturn(3);
 		when(board.turn(first, 3)).thenReturn(SUCCESS);
 		assertFalse(handler.handlePlayerColSelection(first));
+		verify(plotter).plot(board);
 	}
 
 	@Test
