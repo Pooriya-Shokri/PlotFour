@@ -2,6 +2,8 @@ package me.pooriya.plotfour.game.handler;
 
 import me.pooriya.plotfour.board.Board;
 import me.pooriya.plotfour.board.plotter.BoardPlotter;
+import me.pooriya.plotfour.board.turn.TurnResultError;
+import me.pooriya.plotfour.board.turn.TurnResultSuccess;
 import me.pooriya.plotfour.game.Game;
 import me.pooriya.plotfour.game.checker.GameChecker;
 import me.pooriya.plotfour.game.checker.GameStatus;
@@ -18,8 +20,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static me.pooriya.plotfour.PlayerObjectMother.first;
 import static me.pooriya.plotfour.PlayerObjectMother.second;
-import static me.pooriya.plotfour.board.Board.TurnResult.*;
 import static me.pooriya.plotfour.board.BoardSpecification.DEFAULT_SPECIFICATION;
+import static me.pooriya.plotfour.board.turn.TurnResultError.TurnResultErrorType.FULL_COLUMN;
+import static me.pooriya.plotfour.board.turn.TurnResultError.TurnResultErrorType.INVALID_COLUMN;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -46,7 +49,7 @@ public class SimpleGameHandlerTest {
 		second = second();
 		handler = new SimpleGameHandler(reader, writer, Game.of(first, second, board), plotter, checker);
 		when(board.getSpec()).thenReturn(DEFAULT_SPECIFICATION);
-		when(checker.check(any())).thenReturn(GameStatus.notFinished());
+		when(checker.check(anyInt(), anyInt())).thenReturn(GameStatus.notFinished());
 	}
 
 	@Test
@@ -70,7 +73,7 @@ public class SimpleGameHandlerTest {
 	public void handlePlayerColSelection_itShouldReturnWhenBoardAccepts() {
 		handler = spy(handler);
 		when(handler.getPlayerCol(any())).thenReturn(3);
-		when(board.turn(first, 3)).thenReturn(SUCCESS);
+		when(board.turn(first, 3)).thenReturn(TurnResultSuccess.of(1));
 		assertFalse(handler.handlePlayerColSelection(first));
 		verify(plotter).plot(board);
 	}
@@ -79,7 +82,7 @@ public class SimpleGameHandlerTest {
 	public void handlePlayerColSelection_itShouldTryAgainWhenBoardColIsFull() {
 		handler = spy(handler);
 		when(handler.getPlayerCol(any())).thenReturn(3).thenReturn(4);
-		when(board.turn(eq(first), anyInt())).thenReturn(FULL_COLUMN).thenReturn(SUCCESS);
+		when(board.turn(eq(first), anyInt())).thenReturn(TurnResultError.of(FULL_COLUMN)).thenReturn(TurnResultSuccess.of(2));
 		assertFalse(handler.handlePlayerColSelection(first));
 		verify(handler, times(2)).getPlayerCol(first);
 	}
@@ -88,7 +91,7 @@ public class SimpleGameHandlerTest {
 	public void handlePlayerColSelection_itShouldTryAgainWhenBoardColIsInvalid() {
 		handler = spy(handler);
 		when(handler.getPlayerCol(any())).thenReturn(17).thenReturn(5);
-		when(board.turn(eq(first), anyInt())).thenReturn(INVALID_COLUMN).thenReturn(SUCCESS);
+		when(board.turn(eq(first), anyInt())).thenReturn(TurnResultError.of(INVALID_COLUMN)).thenReturn(TurnResultSuccess.of(2));
 		assertFalse(handler.handlePlayerColSelection(first));
 		verify(handler, times(2)).getPlayerCol(first);
 	}
@@ -96,9 +99,9 @@ public class SimpleGameHandlerTest {
 	@Test
 	public void handlePlayerColSelection_itShouldReturnTrueAndPrintWinWhenPlayerWins() {
 		handler = spy(handler);
-		when(checker.check(any())).thenReturn(GameStatus.finishedWithWinner(first));
+		when(checker.check(eq(2), eq(6))).thenReturn(GameStatus.finishedWithWinner(first));
 		when(handler.getPlayerCol(any())).thenReturn(6);
-		when(board.turn(first, 6)).thenReturn(SUCCESS);
+		when(board.turn(first, 6)).thenReturn(TurnResultSuccess.of(2));
 		assertTrue(handler.handlePlayerColSelection(first));
 		verify(writer).printPlayerWin(first);
 	}
@@ -106,9 +109,9 @@ public class SimpleGameHandlerTest {
 	@Test
 	public void handlePlayerColSelection_itShouldReturnTrueAndPrintDrawWhenDraw() {
 		handler = spy(handler);
-		when(checker.check(any())).thenReturn(GameStatus.finishedWithDraw());
+		when(checker.check(eq(2), eq(7))).thenReturn(GameStatus.finishedWithDraw());
 		when(handler.getPlayerCol(any())).thenReturn(7);
-		when(board.turn(first, 7)).thenReturn(SUCCESS);
+		when(board.turn(first, 7)).thenReturn(TurnResultSuccess.of(2));
 		assertTrue(handler.handlePlayerColSelection(first));
 		verify(writer).printDraw();
 	}

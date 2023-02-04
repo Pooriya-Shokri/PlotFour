@@ -1,7 +1,9 @@
 package me.pooriya.plotfour.board;
 
 import lombok.Value;
-import me.pooriya.plotfour.board.Board.TurnResult;
+import me.pooriya.plotfour.board.turn.TurnResult;
+import me.pooriya.plotfour.board.turn.TurnResultError;
+import me.pooriya.plotfour.board.turn.TurnResultSuccess;
 import me.pooriya.plotfour.player.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +14,9 @@ import static java.util.Arrays.asList;
 import static me.pooriya.plotfour.BoardObjectMother.defaultBoard;
 import static me.pooriya.plotfour.PlayerObjectMother.first;
 import static me.pooriya.plotfour.PlayerObjectMother.second;
-import static me.pooriya.plotfour.board.Board.TurnResult.*;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static me.pooriya.plotfour.board.turn.TurnResultError.TurnResultErrorType.FULL_COLUMN;
+import static me.pooriya.plotfour.board.turn.TurnResultError.TurnResultErrorType.INVALID_COLUMN;
+import static org.junit.Assert.*;
 
 public class BoardTest {
 
@@ -29,79 +31,90 @@ public class BoardTest {
 
 	@Test
 	public void shouldReturnInvalidColumn() {
-		assertSame(INVALID_COLUMN, board.turn(player, 20));
-		assertSame(INVALID_COLUMN, board.turn(player, -1));
-		assertSame(INVALID_COLUMN, board.turn(player, 0));
-		assertSame(INVALID_COLUMN, board.turn(player, board.getSpec().getColumns() + 1));
+		assertTurnResultIsInvalidColumn(board.turn(player, 20));
+		assertTurnResultIsInvalidColumn(board.turn(player, -1));
+		assertTurnResultIsInvalidColumn(board.turn(player, 0));
+		assertTurnResultIsInvalidColumn(board.turn(player, board.getSpec().getColumns() + 1));
+	}
+
+	private void assertTurnResultIsInvalidColumn(TurnResult result) {
+		assertFalse(result.isSuccess());
+		assertTrue(result instanceof TurnResultError);
+		assertSame(INVALID_COLUMN, ((TurnResultError) result).getErrorType());
 	}
 
 	@Test
 	public void shouldAddPlayerToEmptyColumn() {
-		assertSame(SUCCESS, board.turn(player, 1));
-		assertSame(player, board.getState()[0][0]);
-
-		assertSame(SUCCESS, board.turn(player, 2));
-		assertSame(player, board.getState()[0][1]);
+		assertSuccessfulTurnResult(board.turn(player, 1), 0, 0);
+		assertSuccessfulTurnResult(board.turn(player, 2), 0, 1);
 	}
 
 	@Test
 	public void shouldAddPlayerToPreOccupiedColumn() {
-		assertSuccessfulTurn(board.turn(player, 1), 0, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 1, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 2, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 3, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 4, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 5, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 0, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 1, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 2, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 3, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 4, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 5, 0);
 
 
-		assertSuccessfulTurn(board.turn(player, 3), 0, 2);
-		assertSuccessfulTurn(board.turn(player, 3), 1, 2);
-		assertSuccessfulTurn(board.turn(player, 3), 2, 2);
-		assertSuccessfulTurn(board.turn(player, 3), 3, 2);
-		assertSuccessfulTurn(board.turn(player, 3), 4, 2);
-		assertSuccessfulTurn(board.turn(player, 3), 5, 2);
+		assertSuccessfulTurnResult(board.turn(player, 3), 0, 2);
+		assertSuccessfulTurnResult(board.turn(player, 3), 1, 2);
+		assertSuccessfulTurnResult(board.turn(player, 3), 2, 2);
+		assertSuccessfulTurnResult(board.turn(player, 3), 3, 2);
+		assertSuccessfulTurnResult(board.turn(player, 3), 4, 2);
+		assertSuccessfulTurnResult(board.turn(player, 3), 5, 2);
 	}
 
 	@Test
 	public void shouldReturnColumnFull() {
-		assertSuccessfulTurn(board.turn(player, 1), 0, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 1, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 2, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 3, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 4, 0);
-		assertSuccessfulTurn(board.turn(player, 1), 5, 0);
-		assertSame(FULL_COLUMN, board.turn(player, 1));
+		assertSuccessfulTurnResult(board.turn(player, 1), 0, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 1, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 2, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 3, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 4, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 5, 0);
+		assertResultTurnIsFullColumn(board.turn(player, 1));
 	}
 
-	private void assertSuccessfulTurn(TurnResult result, int i, int j) {
+	private void assertResultTurnIsFullColumn(TurnResult result) {
+		assertFalse(result.isSuccess());
+		assertTrue(result instanceof TurnResultError);
+		assertSame(FULL_COLUMN, ((TurnResultError) result).getErrorType());
+	}
+
+	private void assertSuccessfulTurnResult(TurnResult result, int i, int j) {
 		assertSuccessfulTurnForPlayer(result, i, j, player);
 	}
 
 	@Test
 	public void shouldReturnSuccessForAnyPlayer() {
 		Player anotherPlayer = second();
-		assertSuccessfulTurn(board.turn(player, 1), 0, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 0, 0);
 		assertSuccessfulTurnForPlayer(board.turn(anotherPlayer, 1), 1, 0, anotherPlayer);
-		assertSuccessfulTurn(board.turn(player, 1), 2, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 2, 0);
 		assertSuccessfulTurnForPlayer(board.turn(anotherPlayer, 1), 3, 0, anotherPlayer);
-		assertSuccessfulTurn(board.turn(player, 1), 4, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 4, 0);
 		assertSuccessfulTurnForPlayer(board.turn(anotherPlayer, 1), 5, 0, anotherPlayer);
 	}
 
 	private void assertSuccessfulTurnForPlayer(TurnResult result, int i, int j, Player player) {
-		assertSame(SUCCESS, result);
+		assertTrue(result.isSuccess());
+		assertTrue(result instanceof TurnResultSuccess);
+		assertEquals(i, ((TurnResultSuccess) result).getRowIndex());
 		assertSame(player, board.getState()[i][j]);
 	}
 
 	@Test
 	public void shouldNotTouchOtherColumns() {
-		assertSuccessfulTurn(board.turn(player, 1), 0, 0);
+		assertSuccessfulTurnResult(board.turn(player, 1), 0, 0);
 		assertOtherBlocksAreEmpty(asList(Pair.of(0, 0)));
 
-		assertSuccessfulTurn(board.turn(player, 2), 0, 1);
+		assertSuccessfulTurnResult(board.turn(player, 2), 0, 1);
 		assertOtherBlocksAreEmpty(asList(Pair.of(0, 0), Pair.of(0, 1)));
 
-		assertSuccessfulTurn(board.turn(player, 2), 1, 1);
+		assertSuccessfulTurnResult(board.turn(player, 2), 1, 1);
 		assertOtherBlocksAreEmpty(asList(Pair.of(0, 0), Pair.of(0, 1), Pair.of(1, 1)));
 	}
 
