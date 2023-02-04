@@ -124,6 +124,63 @@ public class SimpleGameCheckerTest {
 	}
 
 	@Test
+	public void checkDiagonalSurroundings_itShouldReturnFalseWhenNoSurroundings() {
+		Player[][] state = board.getState();
+		state[3][3] = first;
+		assertFalse(checker.checkDiagonalSurroundings(3, 3));
+	}
+
+	@Test
+	public void checkDiagonalSurroundings_itShouldReturnFalseWhenNoConsecutive() {
+		Player[][] state = board.getState();
+		state[3][3] = first;
+		state[2][2] = state[4][4] = state[4][2] = state[2][4] = second;
+		assertFalse(checker.checkDiagonalSurroundings(3, 3));
+	}
+
+	@Test
+	public void checkDiagonalSurroundings_itShouldReturnTrueWhenUpRightDiagonal() {
+		Player[][] state = board.getState();
+		state[1][1] = state[2][2] = state[3][3] = state[4][4] = first;
+		assertTrue(checker.checkDiagonalSurroundings(1, 1));
+	}
+
+	@Test
+	public void checkDiagonalSurroundings_itShouldReturnTrueWhenDownLeftDiagonal() {
+		Player[][] state = board.getState();
+		state[1][1] = state[2][2] = state[3][3] = state[4][4] = first;
+		assertTrue(checker.checkDiagonalSurroundings(4, 4));
+	}
+
+	@Test
+	public void checkDiagonalSurroundings_itShouldReturnTrueWhenDownLeftAndUpRightDiagonal() {
+		Player[][] state = board.getState();
+		state[1][1] = state[2][2] = state[3][3] = state[4][4] = first;
+		assertTrue(checker.checkDiagonalSurroundings(3, 3));
+	}
+
+	@Test
+	public void checkDiagonalSurroundings_itShouldReturnTrueWhenUpLeftDiagonal() {
+		Player[][] state = board.getState();
+		state[4][1] = state[3][2] = state[2][3] = state[1][4] = first;
+		assertTrue(checker.checkDiagonalSurroundings(1, 4));
+	}
+
+	@Test
+	public void checkDiagonalSurroundings_itShouldReturnTrueWhenDownRightDiagonal() {
+		Player[][] state = board.getState();
+		state[4][1] = state[3][2] = state[2][3] = state[1][4] = first;
+		assertTrue(checker.checkDiagonalSurroundings(4, 1));
+	}
+
+	@Test
+	public void checkDiagonalSurroundings_itShouldReturnTrueWhenDownRightAndUpLeftDiagonal() {
+		Player[][] state = board.getState();
+		state[4][1] = state[3][2] = state[2][3] = state[1][4] = first;
+		assertTrue(checker.checkDiagonalSurroundings(2, 3));
+	}
+
+	@Test
 	public void check_itShouldReturnFinishedWhenConsecutiveVertical() {
 		Player[][] state = board.getState();
 		state[0][0]= state[1][0] = state[2][0] = state [3][0] = first;
@@ -165,6 +222,24 @@ public class SimpleGameCheckerTest {
 		Player[][] state = board.getState();
 		state[0][0]= state[0][1] = state[0][2] = state [0][3] = first;
 		GameStatus result = checker.check(0, 2);
+		assertTrue(result.isFinished());
+		assertTrue(result.isWinner());
+	}
+
+	@Test
+	public void check_itShouldReturnFinishedWhenConsecutiveAscendingDiagonal() {
+		Player[][] state = board.getState();
+		state[0][0]= state[1][1] = state[2][2] = state [3][3] = first;
+		GameStatus result = checker.check(2, 2);
+		assertTrue(result.isFinished());
+		assertTrue(result.isWinner());
+	}
+
+	@Test
+	public void check_itShouldReturnFinishedWhenConsecutiveDescendingDiagonal() {
+		Player[][] state = board.getState();
+		state[3][1]= state[2][2] = state[1][3] = state [0][4] = first;
+		GameStatus result = checker.check(2, 2);
 		assertTrue(result.isFinished());
 		assertTrue(result.isWinner());
 	}
