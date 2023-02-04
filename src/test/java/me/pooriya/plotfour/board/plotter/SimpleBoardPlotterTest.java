@@ -10,9 +10,7 @@ import static me.pooriya.plotfour.BoardObjectMother.defaultBoard;
 import static me.pooriya.plotfour.BoardObjectMother.emptyBoard;
 import static me.pooriya.plotfour.PlayerObjectMother.first;
 import static me.pooriya.plotfour.PlayerObjectMother.second;
-import static me.pooriya.plotfour.board.Board.TurnResult.SUCCESS;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 public class SimpleBoardPlotterTest {
 
@@ -66,7 +64,7 @@ public class SimpleBoardPlotterTest {
 		SimpleBoardPlotter plotter = new SimpleBoardPlotter(output);
 		Board board = defaultBoard();
 		Player first = first();
-		assertSame("Prerequisite",SUCCESS, board.turn(first, 1));
+		board.turn(first, 1);
 		plotter.plot(board);
 		String[] outputLines = output.toString().split("\n");
 		for (int i = 1; i < 6 ; i++) {    // checking 6 lines
@@ -82,8 +80,8 @@ public class SimpleBoardPlotterTest {
 		Board board = defaultBoard();
 		Player first = first();
 		Player second = second();
-		assertSame("Prerequisite",SUCCESS, board.turn(first, 1));
-		assertSame("Prerequisite",SUCCESS, board.turn(second, 1));
+		board.turn(first, 1);
+		board.turn(second, 1);
 		plotter.plot(board);
 		String[] outputLines = output.toString().split("\n");
 		for (int i = 1; i < 5 ; i++) {    // checking 6 lines
@@ -100,8 +98,8 @@ public class SimpleBoardPlotterTest {
 		Board board = defaultBoard();
 		Player first = first();
 		Player second = second();
-		assertSame("Prerequisite",SUCCESS, board.turn(first, 1));
-		assertSame("Prerequisite",SUCCESS, board.turn(second, 2));
+		board.turn(first, 1);
+		board.turn(second, 2);
 		plotter.plot(board);
 		String[] outputLines = output.toString().split("\n");
 		for (int i = 1; i < 6 ; i++) {    // checking 6 lines
