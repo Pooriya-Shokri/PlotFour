@@ -5,6 +5,7 @@ import lombok.Value;
 import me.pooriya.plotfour.board.Board;
 import me.pooriya.plotfour.board.BoardSpecification;
 import me.pooriya.plotfour.board.creator.BoardCreator;
+import me.pooriya.plotfour.board.plotter.BoardPlotter;
 import me.pooriya.plotfour.board.reader.BoardReader;
 import me.pooriya.plotfour.player.Player;
 import me.pooriya.plotfour.player.reader.PlayerReader;
@@ -28,6 +29,8 @@ public class Controller {
 
 	@NonNull BoardCreator boardCreator;
 
+	@NonNull BoardPlotter boardPlotter;
+
 	public Board initiateGame() {
 		printlnMsgToOutput(output, GAME_NAME_MSG);
 		Player firstPlayer = playerReader.readPlayer(FIRST);
@@ -38,7 +41,9 @@ public class Controller {
 		printlnMsgToOutput(output, String.format("%s VS %s", firstPlayer.getName(), secondPlayer.getName()));
 		printlnMsgToOutput(output, String.format("%s X %s board", boardSpec.getRows(), boardSpec.getColumns()));
 
-		return boardCreator.createBoard(boardSpec);
+		Board board = boardCreator.createBoard(boardSpec);
+		boardPlotter.plot(board);
+		return board;
 	}
 
 }
