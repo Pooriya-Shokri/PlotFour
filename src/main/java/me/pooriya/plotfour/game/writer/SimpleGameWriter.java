@@ -41,12 +41,12 @@ public class SimpleGameWriter implements GameWriter {
 
 	@Override
 	public void printPlayerWin(Player player) {
-
+		printlnMsgToOutput(output, String.format("Player %s won", player.getName()));
 	}
 
 	@Override
 	public void printDraw() {
-
+		printlnMsgToOutput(output, "It is a draw");
 	}
 
 }
