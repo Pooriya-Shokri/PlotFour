@@ -25,12 +25,13 @@ public class Board {
 		if (col > spec.getColumns() || col < 1)
 			return TurnResultError.of(INVALID_COLUMN);
 		int  i = 0;
-		while ( i < spec.getRows() && state[i][col-1] != null)
+		int actualCol = col - 1;
+		while ( i < spec.getRows() && state[i][actualCol] != null)
 			i++;
 		if (i >= spec.getRows())
 			return TurnResultError.of(FULL_COLUMN);
-		state[i][col -1] = player;
-		return TurnResultSuccess.of(i);
+		state[i][actualCol] = player;
+		return TurnResultSuccess.of(i, actualCol);
 	}
 
 }

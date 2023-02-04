@@ -103,6 +103,7 @@ public class BoardTest {
 		assertTrue(result.isSuccess());
 		assertTrue(result instanceof TurnResultSuccess);
 		assertEquals(i, ((TurnResultSuccess) result).getRowIndex());
+		assertEquals(j, ((TurnResultSuccess) result).getColIndex());
 		assertSame(player, board.getState()[i][j]);
 	}
 

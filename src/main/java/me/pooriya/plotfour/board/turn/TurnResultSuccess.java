@@ -6,6 +6,7 @@ import lombok.Value;
 public class TurnResultSuccess implements TurnResult {
 
 	int rowIndex;
+	int colIndex;
 
 	@Override
 	public boolean isSuccess() {

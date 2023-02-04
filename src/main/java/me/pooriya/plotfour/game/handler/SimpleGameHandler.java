@@ -49,7 +49,7 @@ public class SimpleGameHandler implements GameHandler {
 			if (result.isSuccess()) {
 				TurnResultSuccess success = (TurnResultSuccess) result;
 				plotter.plot(game.getBoard());
-				GameStatus checkResult = checker.check(success.getRowIndex(), col);
+				GameStatus checkResult = checker.check(success.getRowIndex(), success.getColIndex());
 				if (checkResult.isFinished()) {
 					if (checkResult.isWinner())
 						writer.printPlayerWin(player);

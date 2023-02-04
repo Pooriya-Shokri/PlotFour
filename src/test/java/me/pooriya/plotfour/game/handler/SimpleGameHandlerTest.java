@@ -73,25 +73,27 @@ public class SimpleGameHandlerTest {
 	public void handlePlayerColSelection_itShouldReturnWhenBoardAccepts() {
 		handler = spy(handler);
 		when(handler.getPlayerCol(any())).thenReturn(3);
-		when(board.turn(first, 3)).thenReturn(TurnResultSuccess.of(1));
+		when(board.turn(first, 3)).thenReturn(TurnResultSuccess.of(1, 2));
 		assertFalse(handler.handlePlayerColSelection(first));
 		verify(plotter).plot(board);
+		verify(checker).check(1, 2);
 	}
 
 	@Test
 	public void handlePlayerColSelection_itShouldTryAgainWhenBoardColIsFull() {
 		handler = spy(handler);
 		when(handler.getPlayerCol(any())).thenReturn(3).thenReturn(4);
-		when(board.turn(eq(first), anyInt())).thenReturn(TurnResultError.of(FULL_COLUMN)).thenReturn(TurnResultSuccess.of(2));
+		when(board.turn(eq(first), anyInt())).thenReturn(TurnResultError.of(FULL_COLUMN)).thenReturn(TurnResultSuccess.of(2, 3));
 		assertFalse(handler.handlePlayerColSelection(first));
 		verify(handler, times(2)).getPlayerCol(first);
+		verify(checker).check(2, 3);
 	}
 
 	@Test
 	public void handlePlayerColSelection_itShouldTryAgainWhenBoardColIsInvalid() {
 		handler = spy(handler);
 		when(handler.getPlayerCol(any())).thenReturn(17).thenReturn(5);
-		when(board.turn(eq(first), anyInt())).thenReturn(TurnResultError.of(INVALID_COLUMN)).thenReturn(TurnResultSuccess.of(2));
+		when(board.turn(eq(first), anyInt())).thenReturn(TurnResultError.of(INVALID_COLUMN)).thenReturn(TurnResultSuccess.of(2, 4));
 		assertFalse(handler.handlePlayerColSelection(first));
 		verify(handler, times(2)).getPlayerCol(first);
 	}
@@ -99,9 +101,9 @@ public class SimpleGameHandlerTest {
 	@Test
 	public void handlePlayerColSelection_itShouldReturnTrueAndPrintWinWhenPlayerWins() {
 		handler = spy(handler);
-		when(checker.check(eq(2), eq(6))).thenReturn(GameStatus.finishedWithWinner());
+		when(checker.check(2, 5)).thenReturn(GameStatus.finishedWithWinner());
 		when(handler.getPlayerCol(any())).thenReturn(6);
-		when(board.turn(first, 6)).thenReturn(TurnResultSuccess.of(2));
+		when(board.turn(first, 6)).thenReturn(TurnResultSuccess.of(2, 5));
 		assertTrue(handler.handlePlayerColSelection(first));
 		verify(writer).printPlayerWin(first);
 	}
@@ -109,9 +111,9 @@ public class SimpleGameHandlerTest {
 	@Test
 	public void handlePlayerColSelection_itShouldReturnTrueAndPrintDrawWhenDraw() {
 		handler = spy(handler);
-		when(checker.check(eq(2), eq(7))).thenReturn(GameStatus.finishedWithDraw());
+		when(checker.check(2, 6)).thenReturn(GameStatus.finishedWithDraw());
 		when(handler.getPlayerCol(any())).thenReturn(7);
-		when(board.turn(first, 7)).thenReturn(TurnResultSuccess.of(2));
+		when(board.turn(first, 7)).thenReturn(TurnResultSuccess.of(2, 6));
 		assertTrue(handler.handlePlayerColSelection(first));
 		verify(writer).printDraw();
 	}
