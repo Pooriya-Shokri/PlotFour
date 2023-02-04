@@ -3,10 +3,8 @@ package me.pooriya.plotfour.game;
 import lombok.NonNull;
 import lombok.Value;
 import me.pooriya.plotfour.board.Board;
-import me.pooriya.plotfour.board.BoardSpecification;
-import me.pooriya.plotfour.board.creator.BoardCreator;
+import me.pooriya.plotfour.board.handler.BoardHandler;
 import me.pooriya.plotfour.board.plotter.BoardPlotter;
-import me.pooriya.plotfour.board.reader.BoardReader;
 import me.pooriya.plotfour.player.Player;
 import me.pooriya.plotfour.player.reader.PlayerReader;
 
@@ -25,9 +23,7 @@ public class GameCreator {
 
 	@NonNull PlayerReader playerReader;
 
-	@NonNull BoardReader boardReader;
-
-	@NonNull BoardCreator boardCreator;
+	@NonNull BoardHandler boardHandler;
 
 	@NonNull BoardPlotter boardPlotter;
 
@@ -36,12 +32,11 @@ public class GameCreator {
 		Player firstPlayer = playerReader.readPlayer(FIRST);
 		Player secondPlayer = playerReader.readPlayer(SECOND);
 
-		BoardSpecification boardSpec = boardReader.readSpec();
+		Board board = boardHandler.handle();
 
 		printlnMsgToOutput(output, String.format("%s VS %s", firstPlayer.getName(), secondPlayer.getName()));
-		printlnMsgToOutput(output, String.format("%s X %s board", boardSpec.getRows(), boardSpec.getColumns()));
+		printlnMsgToOutput(output, String.format("%s board", board.getSpec()));
 
-		Board board = boardCreator.createBoard(boardSpec);
 		boardPlotter.plot(board);
 		return Game.of(firstPlayer, secondPlayer, board);
 	}
