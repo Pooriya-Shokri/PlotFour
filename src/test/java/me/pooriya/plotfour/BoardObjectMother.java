@@ -17,7 +17,11 @@ public class BoardObjectMother {
 	}
 
 	public static Board customBoard(int row, int col) {
-		return Board.of(new Player[row][col], BoardSpecification.of(row, col));
+		return customBoard(BoardSpecification.of(row, col));
+	}
+
+	public static Board customBoard(BoardSpecification spec) {
+		return Board.of(new Player[spec.getRows()][spec.getColumns()], spec);
 	}
 
 }

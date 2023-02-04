@@ -1,4 +1,4 @@
-package me.pooriya.plotfour.board.creator;
+package me.pooriya.plotfour.board.handler.creator;
 
 import lombok.NonNull;
 import me.pooriya.plotfour.board.Board;

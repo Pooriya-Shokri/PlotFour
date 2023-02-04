@@ -1,7 +1,8 @@
-package me.pooriya.plotfour.board.creator;
+package me.pooriya.plotfour.board.handler.creator;
 
 import me.pooriya.plotfour.board.Board;
 import me.pooriya.plotfour.board.BoardSpecification;
+import me.pooriya.plotfour.board.handler.creator.SimpleBoardCreator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

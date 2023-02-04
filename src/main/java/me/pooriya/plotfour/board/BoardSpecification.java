@@ -14,4 +14,11 @@ public class BoardSpecification {
 
 	public static final BoardSpecification DEFAULT_SPECIFICATION = BoardSpecification.of(6, 7);
 
+	public static final char SPLITTER_SYMBOL = 'x';
+
+	@Override
+	public String toString() {
+		return String.format("%s x %s", rows, columns);
+	}
+
 }
