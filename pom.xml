@@ -6,7 +6,7 @@
 
     <groupId>me.pooriya</groupId>
     <artifactId>PlotFour</artifactId>
-    <version>4.0-SNAPSHOT</version>
+    <version>4.0</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
