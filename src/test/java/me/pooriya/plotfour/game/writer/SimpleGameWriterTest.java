@@ -52,4 +52,17 @@ public class SimpleGameWriterTest {
 		assertEquals("Game over!\n", output.toString());
 	}
 
+	@Test
+	public void printPlayerWin_itShouldShowPlayerName() {
+		Player player = first();
+		writer.printPlayerWin(player);
+		assertEquals(String.format("Player %s won%n", player.getName()), output.toString());
+	}
+
+	@Test
+	public void printDraw_itShouldShowDrawSign() {
+		writer.printDraw();
+		assertEquals("It is a draw\n", output.toString());
+	}
+
 }

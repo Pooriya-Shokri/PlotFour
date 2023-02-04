@@ -8,6 +8,8 @@ import me.pooriya.plotfour.board.reader.BoardReader;
 import me.pooriya.plotfour.board.reader.SimpleBoardReader;
 import me.pooriya.plotfour.game.Game;
 import me.pooriya.plotfour.game.GameCreator;
+import me.pooriya.plotfour.game.checker.GameChecker;
+import me.pooriya.plotfour.game.checker.SimpleGameChecker;
 import me.pooriya.plotfour.game.handler.GameHandler;
 import me.pooriya.plotfour.game.handler.SimpleGameHandler;
 import me.pooriya.plotfour.game.reader.GameReader;
@@ -35,7 +37,8 @@ public class Main {
 
 		GameReader gameReader = new SimpleGameReader(input);
 		GameWriter gameWriter = new SimpleGameWriter(output);
-		GameHandler gameHandler = new SimpleGameHandler(gameReader, gameWriter, game, plotter);
+		GameChecker gameChecker = new SimpleGameChecker(game);
+		GameHandler gameHandler = new SimpleGameHandler(gameReader, gameWriter, game, plotter, gameChecker);
 		gameHandler.handle();
 	}
 
