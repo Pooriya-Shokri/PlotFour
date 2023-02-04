@@ -2,13 +2,37 @@ package me.pooriya.plotfour.board;
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.experimental.NonFinal;
+import me.pooriya.plotfour.player.Player;
 
+import static me.pooriya.plotfour.board.Board.TurnResult.*;
+
+@NonFinal
 @Value(staticConstructor = "of")
 public class Board {
 
-	int[][] state;
+	@NonNull
+	Player[][] state;
 
 	@NonNull
 	BoardSpecification spec;
+
+	public TurnResult turn(Player player, int col) {
+		if (col > spec.getColumns() || col < 1)
+			return INVALID_COLUMN;
+		int  i = 0;
+		while ( i < spec.getRows() && state[i][col-1] != null)
+			i++;
+		if (i >= spec.getRows())
+			return FULL_COLUMN;
+		state[i][col -1] = player;
+		return SUCCESS;
+	}
+
+	public enum TurnResult {
+		SUCCESS,
+		FULL_COLUMN,
+		INVALID_COLUMN
+	}
 
 }

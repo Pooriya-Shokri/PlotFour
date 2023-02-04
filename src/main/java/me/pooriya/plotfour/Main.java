@@ -6,6 +6,14 @@ import me.pooriya.plotfour.board.plotter.BoardPlotter;
 import me.pooriya.plotfour.board.plotter.SimpleBoardPlotter;
 import me.pooriya.plotfour.board.reader.BoardReader;
 import me.pooriya.plotfour.board.reader.SimpleBoardReader;
+import me.pooriya.plotfour.game.Game;
+import me.pooriya.plotfour.game.GameCreator;
+import me.pooriya.plotfour.game.handler.GameHandler;
+import me.pooriya.plotfour.game.handler.SimpleGameHandler;
+import me.pooriya.plotfour.game.reader.GameReader;
+import me.pooriya.plotfour.game.reader.SimpleGameReader;
+import me.pooriya.plotfour.game.writer.GameWriter;
+import me.pooriya.plotfour.game.writer.SimpleGameWriter;
 import me.pooriya.plotfour.player.reader.PlayerReader;
 import me.pooriya.plotfour.player.reader.SimplePlayerReader;
 
@@ -22,8 +30,13 @@ public class Main {
 		BoardCreator boardCreator = new SimpleBoardCreator();
 		BoardPlotter plotter = new SimpleBoardPlotter(output);
 
-		Controller con = Controller.of(output, playerReader, boardReader, boardCreator, plotter);
-		con.initiateGame();
+		GameCreator con = GameCreator.of(output, playerReader, boardReader, boardCreator, plotter);
+		Game game = con.initiateGame();
+
+		GameReader gameReader = new SimpleGameReader(input);
+		GameWriter gameWriter = new SimpleGameWriter(output);
+		GameHandler gameHandler = new SimpleGameHandler(gameReader, gameWriter, game, plotter);
+		gameHandler.handle();
 	}
 
 }

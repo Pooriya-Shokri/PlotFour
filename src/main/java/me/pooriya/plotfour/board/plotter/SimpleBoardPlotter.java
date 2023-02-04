@@ -4,11 +4,13 @@ import lombok.NonNull;
 import lombok.Value;
 import me.pooriya.plotfour.board.Board;
 import me.pooriya.plotfour.board.BoardSpecification;
+import me.pooriya.plotfour.player.Player;
 
 import java.io.OutputStream;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static me.pooriya.plotfour.util.OutputStreamUtil.printMsgToOutput;
 import static me.pooriya.plotfour.util.OutputStreamUtil.printlnMsgToOutput;
 
 @Value
@@ -28,17 +30,23 @@ public class SimpleBoardPlotter implements BoardPlotter {
 				.collect(Collectors.joining());
 		printlnMsgToOutput(output, indexRow);
 
-		String eachRow = IntStream.rangeClosed(0, spec.getColumns())
-				.mapToObj(i -> "| ")
-				.collect(Collectors.joining());
-		for (int i = 0; i < spec.getRows(); i++) {
-			printlnMsgToOutput(output, eachRow);
+
+		for (int i = spec.getRows() -1; i >= 0; i--) {
+			for (int j=0; j< spec.getColumns(); j++) {
+				printMsgToOutput(output, "|"+ getBlockRepresentation(board, i, j));
+			}
+			printlnMsgToOutput(output, "|");
 		}
 
 		String finalRow = IntStream.rangeClosed(1, spec.getColumns() * 2 + 1)
 				.mapToObj(i -> "=")
 				.collect(Collectors.joining());
 		printlnMsgToOutput(output, finalRow);
+	}
+
+	private char getBlockRepresentation(Board board, int i, int j) {
+		Player blockVal = board.getState()[i][j];
+		return blockVal != null ? blockVal.getStance().getSymbol() : ' ';
 	}
 
 }
