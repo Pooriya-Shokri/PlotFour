@@ -1,10 +1,11 @@
-package me.pooriya.plotfour.turn.handler;
+package me.pooriya.plotfour.game.handler;
 
 import me.pooriya.plotfour.board.Board;
+import me.pooriya.plotfour.game.Game;
+import me.pooriya.plotfour.game.reader.EndgameException;
+import me.pooriya.plotfour.game.reader.GameReader;
+import me.pooriya.plotfour.game.writer.GameWriter;
 import me.pooriya.plotfour.player.Player;
-import me.pooriya.plotfour.turn.reader.EndgameException;
-import me.pooriya.plotfour.turn.reader.TurnReader;
-import me.pooriya.plotfour.turn.writer.TurnWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,23 +21,23 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleTurnHandlerTest {
+public class SimpleGameHandlerTest {
 
 	@Mock
 	private Board board;
 	private Player first;
 	private Player second;
 	@Mock
-	private TurnWriter writer;
+	private GameWriter writer;
 	@Mock
-	private TurnReader reader;
-	private SimpleTurnHandler handler;
+	private GameReader reader;
+	private SimpleGameHandler handler;
 
 	@Before
 	public void setup() {
 		first = first();
 		second = second();
-		handler = new SimpleTurnHandler(reader, writer, first, second, board);
+		handler = new SimpleGameHandler(reader, writer, Game.of(first, second, board));
 		when(board.getSpec()).thenReturn(DEFAULT_SPECIFICATION);
 	}
 

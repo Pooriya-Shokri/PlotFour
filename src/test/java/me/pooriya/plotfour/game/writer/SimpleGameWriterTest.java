@@ -1,4 +1,4 @@
-package me.pooriya.plotfour.turn.writer;
+package me.pooriya.plotfour.game.writer;
 
 import me.pooriya.plotfour.player.Player;
 import org.junit.Before;
@@ -10,15 +10,15 @@ import java.io.OutputStream;
 import static me.pooriya.plotfour.PlayerObjectMother.first;
 import static org.junit.Assert.assertEquals;
 
-public class SimpleTurnWriterTest {
+public class SimpleGameWriterTest {
 
-	private SimpleTurnWriter writer;
+	private SimpleGameWriter writer;
 	private OutputStream output;
 
 	@Before
 	public void setup() {
 		output = new ByteArrayOutputStream();
-		writer = new SimpleTurnWriter(output);
+		writer = new SimpleGameWriter(output);
 	}
 
 	@Test

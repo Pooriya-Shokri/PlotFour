@@ -1,4 +1,4 @@
-package me.pooriya.plotfour.turn.reader;
+package me.pooriya.plotfour.game.reader;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -7,11 +7,11 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 @Value
-public class SimpleTurnReader implements TurnReader {
+public class SimpleGameReader implements GameReader {
 
 	Scanner scanner;
 
-	public SimpleTurnReader(@NonNull InputStream input) {
+	public SimpleGameReader(@NonNull InputStream input) {
 		this.scanner = new Scanner(input);
 	}
 

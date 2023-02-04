@@ -1,6 +1,6 @@
-package me.pooriya.plotfour.turn.reader;
+package me.pooriya.plotfour.game.reader;
 
-public interface TurnReader {
+public interface GameReader {
 
 	int readNextColumn() throws IllegalArgumentException, EndgameException;
 

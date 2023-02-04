@@ -1,4 +1,4 @@
-package me.pooriya.plotfour.turn.writer;
+package me.pooriya.plotfour.game.writer;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -10,7 +10,7 @@ import static me.pooriya.plotfour.util.OutputStreamUtil.printMsgToOutput;
 import static me.pooriya.plotfour.util.OutputStreamUtil.printlnMsgToOutput;
 
 @Value
-public class SimpleTurnWriter implements TurnWriter {
+public class SimpleGameWriter implements GameWriter {
 
 	@NonNull OutputStream output;
 

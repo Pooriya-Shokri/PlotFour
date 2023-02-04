@@ -1,8 +1,8 @@
-package me.pooriya.plotfour.turn.writer;
+package me.pooriya.plotfour.game.writer;
 
 import me.pooriya.plotfour.player.Player;
 
-public interface TurnWriter {
+public interface GameWriter {
 
 	void printInputPlayerTurn(Player player);
 

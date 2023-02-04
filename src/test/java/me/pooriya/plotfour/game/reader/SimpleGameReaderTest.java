@@ -1,4 +1,4 @@
-package me.pooriya.plotfour.turn.reader;
+package me.pooriya.plotfour.game.reader;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -8,12 +8,12 @@ import java.io.InputStream;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
-public class SimpleTurnReaderTest {
+public class SimpleGameReaderTest {
 
 	@Test
 	public void itShouldReadCol() {
 		InputStream input = toInputStream("1\n");
-		SimpleTurnReader reader = new SimpleTurnReader(input);
+		SimpleGameReader reader = new SimpleGameReader(input);
 		int result = reader.readNextColumn();
 		assertEquals(1, result);
 	}
@@ -21,14 +21,14 @@ public class SimpleTurnReaderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void itShouldThrowIllegalArg() {
 		InputStream input = toInputStream("not-in-number-format\n");
-		SimpleTurnReader reader = new SimpleTurnReader(input);
+		SimpleGameReader reader = new SimpleGameReader(input);
 		reader.readNextColumn();
 	}
 
 	@Test(expected = EndgameException.class)
 	public void itShouldThrowEndgame() {
 		InputStream input = toInputStream("end\n");
-		SimpleTurnReader reader = new SimpleTurnReader(input);
+		SimpleGameReader reader = new SimpleGameReader(input);
 		reader.readNextColumn();
 	}
 

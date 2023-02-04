@@ -1,36 +1,32 @@
-package me.pooriya.plotfour.turn.handler;
+package me.pooriya.plotfour.game.handler;
 
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.NonFinal;
-import me.pooriya.plotfour.board.Board;
 import me.pooriya.plotfour.board.Board.TurnResult;
+import me.pooriya.plotfour.game.Game;
+import me.pooriya.plotfour.game.reader.EndgameException;
+import me.pooriya.plotfour.game.reader.GameReader;
+import me.pooriya.plotfour.game.writer.GameWriter;
 import me.pooriya.plotfour.player.Player;
-import me.pooriya.plotfour.turn.reader.EndgameException;
-import me.pooriya.plotfour.turn.reader.TurnReader;
-import me.pooriya.plotfour.turn.writer.TurnWriter;
 
 import static me.pooriya.plotfour.board.Board.TurnResult.*;
 
 @Value
 @NonFinal
-public class SimpleTurnHandler implements TurnHandler {
+public class SimpleGameHandler implements GameHandler {
 
-	@NonNull TurnReader reader;
+	@NonNull GameReader reader;
 
-	@NonNull TurnWriter writer;
+	@NonNull GameWriter writer;
 
-	@NonNull Player first;
-
-	@NonNull Player second;
-
-	@NonNull Board board;
+	@NonNull Game game;
 
 	@Override
 	public void handle() {
-		Player currentPlayer = first;
+		Player currentPlayer = game.getFirst();
 		while (!handlePlayerColSelection(currentPlayer)) {
-			currentPlayer = currentPlayer != first ? first : second;
+			currentPlayer = currentPlayer != game.getFirst() ? game.getFirst() : game.getSecond();
 		}
 		writer.printGameOver();
 	}
@@ -38,14 +34,14 @@ public class SimpleTurnHandler implements TurnHandler {
 	boolean handlePlayerColSelection(Player player) {
 		try {
 			int col = getPlayerCol(player);
-			TurnResult result = board.turn(player, col);
+			TurnResult result = game.getBoard().turn(player, col);
 			if (result == SUCCESS) {
 				return false;
 			}
 			if (result == FULL_COLUMN) {
 				writer.printColumnIsFull(col);
 			} else if (result == INVALID_COLUMN) {
-				writer.printInputOutOfRange(board.getSpec().getColumns());
+				writer.printInputOutOfRange(game.getBoard().getSpec().getColumns());
 			}
 			return handlePlayerColSelection(player);
 		} catch (EndgameException e) {

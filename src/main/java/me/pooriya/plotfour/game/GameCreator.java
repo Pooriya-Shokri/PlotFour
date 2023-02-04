@@ -1,4 +1,4 @@
-package me.pooriya.plotfour;
+package me.pooriya.plotfour.game;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -17,7 +17,7 @@ import static me.pooriya.plotfour.player.Stance.SECOND;
 import static me.pooriya.plotfour.util.OutputStreamUtil.printlnMsgToOutput;
 
 @Value(staticConstructor = "of")
-public class Controller {
+public class GameCreator {
 
 	private static final String GAME_NAME_MSG = "Plot Four";
 
@@ -31,7 +31,7 @@ public class Controller {
 
 	@NonNull BoardPlotter boardPlotter;
 
-	public Board initiateGame() {
+	public Game initiateGame() {
 		printlnMsgToOutput(output, GAME_NAME_MSG);
 		Player firstPlayer = playerReader.readPlayer(FIRST);
 		Player secondPlayer = playerReader.readPlayer(SECOND);
@@ -43,7 +43,7 @@ public class Controller {
 
 		Board board = boardCreator.createBoard(boardSpec);
 		boardPlotter.plot(board);
-		return board;
+		return Game.of(firstPlayer, secondPlayer, board);
 	}
 
 }

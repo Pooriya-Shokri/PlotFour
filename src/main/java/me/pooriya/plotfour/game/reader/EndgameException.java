@@ -1,4 +1,4 @@
-package me.pooriya.plotfour.turn.reader;
+package me.pooriya.plotfour.game.reader;
 
 import lombok.NoArgsConstructor;
 
