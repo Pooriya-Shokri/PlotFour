@@ -2,20 +2,22 @@ package me.pooriya.plotfour;
 
 import me.pooriya.plotfour.board.Board;
 import me.pooriya.plotfour.board.BoardSpecification;
+import me.pooriya.plotfour.player.Player;
+
+import static me.pooriya.plotfour.board.BoardSpecification.DEFAULT_SPECIFICATION;
 
 public class BoardObjectMother {
 
 	public static Board emptyBoard() {
-		return Board.of(new int[0][0], BoardSpecification.of(0, 0));
+		return customBoard(0, 0);
 	}
 
 	public static Board defaultBoard() {
-		BoardSpecification defaultSpec = BoardSpecification.DEFAULT_SPECIFICATION;
-		return Board.of(new int[defaultSpec.getRows()][defaultSpec.getRows()], defaultSpec);
+		return customBoard(DEFAULT_SPECIFICATION.getRows(), DEFAULT_SPECIFICATION.getColumns());
 	}
 
 	public static Board customBoard(int row, int col) {
-		return Board.of(new int[row][col], BoardSpecification.of(row, col));
+		return Board.of(new Player[row][col], BoardSpecification.of(row, col));
 	}
 
 }
