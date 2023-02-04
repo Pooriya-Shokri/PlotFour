@@ -35,7 +35,7 @@ public class Main {
 
 		GameReader gameReader = new SimpleGameReader(input);
 		GameWriter gameWriter = new SimpleGameWriter(output);
-		GameHandler gameHandler = new SimpleGameHandler(gameReader, gameWriter, game, plotter);
+		GameHandler gameHandler = new SimpleGameHandler(gameReader, gameWriter, game, plotter, null);
 		gameHandler.handle();
 	}
 

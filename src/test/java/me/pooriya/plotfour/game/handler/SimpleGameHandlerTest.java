@@ -3,6 +3,8 @@ package me.pooriya.plotfour.game.handler;
 import me.pooriya.plotfour.board.Board;
 import me.pooriya.plotfour.board.plotter.BoardPlotter;
 import me.pooriya.plotfour.game.Game;
+import me.pooriya.plotfour.game.checker.GameChecker;
+import me.pooriya.plotfour.game.checker.GameStatus;
 import me.pooriya.plotfour.game.reader.EndgameException;
 import me.pooriya.plotfour.game.reader.GameReader;
 import me.pooriya.plotfour.game.writer.GameWriter;
@@ -34,14 +36,17 @@ public class SimpleGameHandlerTest {
 	private GameReader reader;
 	@Mock
 	private BoardPlotter plotter;
+	@Mock
+	private GameChecker checker;
 	private SimpleGameHandler handler;
 
 	@Before
 	public void setup() {
 		first = first();
 		second = second();
-		handler = new SimpleGameHandler(reader, writer, Game.of(first, second, board), plotter);
+		handler = new SimpleGameHandler(reader, writer, Game.of(first, second, board), plotter, checker);
 		when(board.getSpec()).thenReturn(DEFAULT_SPECIFICATION);
+		when(checker.check(any())).thenReturn(GameStatus.notFinished());
 	}
 
 	@Test
@@ -86,6 +91,26 @@ public class SimpleGameHandlerTest {
 		when(board.turn(eq(first), anyInt())).thenReturn(INVALID_COLUMN).thenReturn(SUCCESS);
 		assertFalse(handler.handlePlayerColSelection(first));
 		verify(handler, times(2)).getPlayerCol(first);
+	}
+
+	@Test
+	public void handlePlayerColSelection_itShouldReturnTrueAndPrintWinWhenPlayerWins() {
+		handler = spy(handler);
+		when(checker.check(any())).thenReturn(GameStatus.finishedWithWinner(first));
+		when(handler.getPlayerCol(any())).thenReturn(6);
+		when(board.turn(first, 6)).thenReturn(SUCCESS);
+		assertTrue(handler.handlePlayerColSelection(first));
+		verify(writer).printPlayerWin(first);
+	}
+
+	@Test
+	public void handlePlayerColSelection_itShouldReturnTrueAndPrintDrawWhenDraw() {
+		handler = spy(handler);
+		when(checker.check(any())).thenReturn(GameStatus.finishedWithDraw());
+		when(handler.getPlayerCol(any())).thenReturn(7);
+		when(board.turn(first, 7)).thenReturn(SUCCESS);
+		assertTrue(handler.handlePlayerColSelection(first));
+		verify(writer).printDraw();
 	}
 
 	@Test

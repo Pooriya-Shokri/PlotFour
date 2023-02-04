@@ -39,4 +39,14 @@ public class SimpleGameWriter implements GameWriter {
 		printlnMsgToOutput(output, "Game over!");
 	}
 
+	@Override
+	public void printPlayerWin(Player player) {
+
+	}
+
+	@Override
+	public void printDraw() {
+
+	}
+
 }

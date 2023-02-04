@@ -6,6 +6,8 @@ import lombok.experimental.NonFinal;
 import me.pooriya.plotfour.board.Board.TurnResult;
 import me.pooriya.plotfour.board.plotter.BoardPlotter;
 import me.pooriya.plotfour.game.Game;
+import me.pooriya.plotfour.game.checker.GameChecker;
+import me.pooriya.plotfour.game.checker.GameStatus;
 import me.pooriya.plotfour.game.reader.EndgameException;
 import me.pooriya.plotfour.game.reader.GameReader;
 import me.pooriya.plotfour.game.writer.GameWriter;
@@ -25,6 +27,8 @@ public class SimpleGameHandler implements GameHandler {
 
 	@NonNull BoardPlotter plotter;
 
+	@NonNull GameChecker checker;
+
 	@Override
 	public void handle() {
 		Player currentPlayer = game.getFirst();
@@ -40,7 +44,14 @@ public class SimpleGameHandler implements GameHandler {
 			TurnResult result = game.getBoard().turn(player, col);
 			if (result == SUCCESS) {
 				plotter.plot(game.getBoard());
-				return false;
+				GameStatus checkResult = checker.check(game);
+				if (checkResult.isFinished()) {
+					if (checkResult.getWinner() != null)
+						writer.printPlayerWin(checkResult.getWinner());
+					else
+						writer.printDraw();
+				}
+				return checkResult.isFinished();
 			}
 			if (result == FULL_COLUMN) {
 				writer.printColumnIsFull(col);

@@ -14,4 +14,8 @@ public interface GameWriter {
 
 	void printGameOver();
 
+	void printPlayerWin(Player player);
+
+	void printDraw();
+
 }
