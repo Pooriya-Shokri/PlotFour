@@ -3,7 +3,6 @@ package me.pooriya.plotfour.game.checker;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import me.pooriya.plotfour.player.Player;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -13,19 +12,19 @@ import static lombok.AccessLevel.PRIVATE;
 public class GameStatus {
 
 	public static GameStatus notFinished() {
-		return GameStatus.of(false, null);
+		return GameStatus.of(false, false);
 	}
 
-	public static GameStatus finishedWithWinner(Player winner) {
-		return GameStatus.of(true, winner);
+	public static GameStatus finishedWithWinner() {
+		return GameStatus.of(true, true);
 	}
 
 	public static GameStatus finishedWithDraw() {
-		return GameStatus.of(true, null);
+		return GameStatus.of(true, false);
 	}
 
 	boolean isFinished;
 
-	Player winner;
+	boolean isWinner;
 
 }

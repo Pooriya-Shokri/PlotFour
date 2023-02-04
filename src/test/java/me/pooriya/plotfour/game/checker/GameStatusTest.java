@@ -4,7 +4,8 @@ import me.pooriya.plotfour.player.Player;
 import org.junit.Test;
 
 import static me.pooriya.plotfour.PlayerObjectMother.first;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class GameStatusTest {
 
@@ -12,22 +13,22 @@ public class GameStatusTest {
 	public void notFinished_() {
 		GameStatus result = GameStatus.notFinished();
 		assertFalse(result.isFinished());
-		assertNull(result.getWinner());
+		assertFalse(result.isWinner());
 	}
 
 	@Test
 	public void finishedWithWinner_() {
 		Player player = first();
-		GameStatus result = GameStatus.finishedWithWinner(player);
+		GameStatus result = GameStatus.finishedWithWinner();
 		assertTrue(result.isFinished());
-		assertSame(player, result.getWinner());
+		assertTrue(result.isWinner());
 	}
 
 	@Test
 	public void finishedWithDraw_() {
 		GameStatus result = GameStatus.finishedWithDraw();
 		assertTrue(result.isFinished());
-		assertNull(result.getWinner());
+		assertFalse(result.isWinner());
 	}
 
 }

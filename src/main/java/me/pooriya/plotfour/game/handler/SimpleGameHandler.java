@@ -51,8 +51,8 @@ public class SimpleGameHandler implements GameHandler {
 				plotter.plot(game.getBoard());
 				GameStatus checkResult = checker.check(success.getRowIndex(), col);
 				if (checkResult.isFinished()) {
-					if (checkResult.getWinner() != null)
-						writer.printPlayerWin(checkResult.getWinner());
+					if (checkResult.isWinner())
+						writer.printPlayerWin(player);
 					else
 						writer.printDraw();
 				}

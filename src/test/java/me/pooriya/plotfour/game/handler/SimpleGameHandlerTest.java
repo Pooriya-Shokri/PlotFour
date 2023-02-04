@@ -99,7 +99,7 @@ public class SimpleGameHandlerTest {
 	@Test
 	public void handlePlayerColSelection_itShouldReturnTrueAndPrintWinWhenPlayerWins() {
 		handler = spy(handler);
-		when(checker.check(eq(2), eq(6))).thenReturn(GameStatus.finishedWithWinner(first));
+		when(checker.check(eq(2), eq(6))).thenReturn(GameStatus.finishedWithWinner());
 		when(handler.getPlayerCol(any())).thenReturn(6);
 		when(board.turn(first, 6)).thenReturn(TurnResultSuccess.of(2));
 		assertTrue(handler.handlePlayerColSelection(first));
