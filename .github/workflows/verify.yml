@@ -38,5 +38,10 @@ jobs:
           java-version: '8'
           cache: 'maven'
 
-      - name: Test
-        run: mvn clean test
+      - name: Run tests and collect coverage
+        run: mvn -B test
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
